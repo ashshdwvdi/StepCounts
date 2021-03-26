@@ -14,11 +14,18 @@ class HomeViewModel: ViewModel {
     
     // MARK: - Public methods
     
+    func viewDidLoad() {
+        self.handleFetchStepCounts()
+    }
+    
     func setViewHandler(_ viewHandler: HomeViewHandling?) {
         self.viewHandler = viewHandler
     }
     
-    func handleFetchStepCounts() {
+    
+    // MARK: - Private methods
+    
+    private func handleFetchStepCounts() {
         if HKHealthStore.isHealthDataAvailable() {
             let readDataTypes: Set = [
                 HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
@@ -36,9 +43,6 @@ class HomeViewModel: ViewModel {
             }
         }
     }
-    
-    
-    // MARK: - Private methods
     
     private func fetchStepCounts() {
         guard let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount) else {

@@ -76,7 +76,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.inputStepCountTextField.becomeFirstResponder()
-        self.viewModel.handleFetchStepCounts()
+        self.viewModel.viewDidLoad()
     }
     
     

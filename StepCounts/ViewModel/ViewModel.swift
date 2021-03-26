@@ -5,4 +5,6 @@
 //  Created by Ashish Dwivedi on 26/03/21.
 //
 
-protocol ViewModel {}
+protocol ViewModel {
+    func viewDidLoad()
+}
