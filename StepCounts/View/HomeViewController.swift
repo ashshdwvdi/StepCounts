@@ -26,6 +26,7 @@ class HomeViewController: UIViewController {
         textField.layer.cornerRadius = Dimension.cornerRadius
         textField.layer.masksToBounds = true
         textField.textAlignment = .center
+        textField.textColor = UIColor.black
         return textField
     }()
     
@@ -36,6 +37,7 @@ class HomeViewController: UIViewController {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
+        label.textColor = UIColor.black
         return label
     }()
     
@@ -56,11 +58,11 @@ class HomeViewController: UIViewController {
     init(with viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel.setViewHandler(self)
         self.view.backgroundColor = .white
         self.containerStackView.addArrangedSubview(self.inputStepCountTextField)
         self.containerStackView.addArrangedSubview(self.resultInfoLabel)
         self.view.addSubview(self.containerStackView)
-        self.inputStepCountTextField.becomeFirstResponder()
         self.layoutComponents()
     }
     
@@ -73,7 +75,8 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.viewModel.setViewHandler(self)
+        self.inputStepCountTextField.becomeFirstResponder()
+        self.viewModel.handleFetchStepCounts()
     }
     
     
@@ -137,13 +140,15 @@ extension HomeViewController: HomeViewHandling {
         activityIndicatorView.style = .medium
         loaderAlert.view.addSubview(activityIndicatorView)
         self.loaderIndicator = loaderAlert
-        self.present(loaderAlert, animated: true, completion: nil)
         
+        DispatchQueue.main.async {[weak self] in
+            self?.present(loaderAlert, animated: true, completion: nil)
+        }
     }
     
     func hideLoader() {
-        DispatchQueue.main.async {
-            self.loaderIndicator?.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {[weak self] in
+            self?.loaderIndicator?.dismiss(animated: true, completion: nil)
         }
     }
     
