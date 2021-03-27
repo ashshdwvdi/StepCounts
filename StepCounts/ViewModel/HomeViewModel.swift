@@ -43,7 +43,7 @@ class HomeViewModel: ViewModel {
                 case .success(let dateAsString):
                     return "Congo! 🥳 you achieved your goal on: \"\(dateAsString)\""
                 case .failure:
-                    return "OH you have long ways to go 😭"
+                    return "Oh you have long ways to go 😭"
                 case .none:
                     return "Hey! enter some steps 🥸"
             }
@@ -87,6 +87,17 @@ class HomeViewModel: ViewModel {
     
     
     // MARK: - Private methods
+    
+    private func handleDateCheckForStepsReached(stepCount: Double) {
+        if let goalDate = self.getDateForStepsReached(stepCount) {
+            self.resultString = StepRecordResult.success(
+                Self.dateFormatter.string(from: goalDate)).result
+        } else {
+            self.resultString = StepRecordResult.failure.result
+        }
+        
+        self.viewHandler?.reloadView()
+    }
     
     private func handleFetchStepCounts() {
         if HKHealthStore.isHealthDataAvailable() {
@@ -151,26 +162,14 @@ class HomeViewModel: ViewModel {
             byAdding: dateComponents, to: Self.currentDate) ?? Self.currentDate
     }
     
-    private func handleDateCheckForStepsReached(stepCount: Double) {
-        if let goalDate = self.getDateForStepsReached(stepCount) {
-            self.resultString = StepRecordResult.success(
-                Self.dateFormatter.string(from: goalDate)).result
-        } else {
-            self.resultString = StepRecordResult.failure.result
-        }
-        
-        self.viewHandler?.reloadView()
-    }
-    
     private func getDateForStepsReached(_ stepCount: Double) -> Date? {
-        let stepRecords = self.stepCountRecords
         var stop = false
         var iterator = 0
         var resultRecord: StepCountRecord?
         var cumulativeSumOfSteps: Double = 0.0
         
-        while iterator < stepRecords.count && !stop {
-            let record = stepRecords[iterator]
+        while iterator < self.stepCountRecords.count && !stop {
+            let record = self.stepCountRecords[iterator]
             cumulativeSumOfSteps += Double(Int(record.stepCount))
             
             if cumulativeSumOfSteps >= stepCount {
@@ -181,10 +180,6 @@ class HomeViewModel: ViewModel {
             iterator += 1
         }
         
-        if let result = resultRecord {
-            return result.dateTimeStamp
-        } else {
-            return nil
-        }
+        return resultRecord?.dateTimeStamp
     }
 }
