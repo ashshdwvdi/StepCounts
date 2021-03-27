@@ -131,17 +131,16 @@ private extension HomeViewController {
 
 extension HomeViewController: HomeViewHandling {
     func showLoader() {
-        let loaderAlert = UIAlertController(
-            title: nil, message: "Loading...", preferredStyle: .alert)
-        let activityIndicatorView = UIActivityIndicatorView(
-            frame: .init(x: 10, y: 5, width: 50, height: 50))
-        activityIndicatorView.hidesWhenStopped = true
-        activityIndicatorView.startAnimating()
-        activityIndicatorView.style = .medium
-        loaderAlert.view.addSubview(activityIndicatorView)
-        self.loaderIndicator = loaderAlert
-        
         DispatchQueue.main.async {[weak self] in
+            let loaderAlert = UIAlertController(
+                title: nil, message: "Loading...", preferredStyle: .alert)
+            let activityIndicatorView = UIActivityIndicatorView(
+                frame: .init(x: 10, y: 5, width: 50, height: 50))
+            activityIndicatorView.hidesWhenStopped = true
+            activityIndicatorView.startAnimating()
+            activityIndicatorView.style = .medium
+            loaderAlert.view.addSubview(activityIndicatorView)
+            self?.loaderIndicator = loaderAlert
             self?.present(loaderAlert, animated: true, completion: nil)
         }
     }

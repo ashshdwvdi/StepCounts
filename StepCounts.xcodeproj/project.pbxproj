@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE0D53CB260F10C3005B9F98 /* StepCountRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0D53CA260F10C3005B9F98 /* StepCountRecord.swift */; };
 		BEF17D37260DDC0300D74DFD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF17D36260DDC0300D74DFD /* AppDelegate.swift */; };
 		BEF17D39260DDC0300D74DFD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF17D38260DDC0300D74DFD /* SceneDelegate.swift */; };
 		BEF17D3B260DDC0300D74DFD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF17D3A260DDC0300D74DFD /* HomeViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE0D53CA260F10C3005B9F98 /* StepCountRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountRecord.swift; sourceTree = "<group>"; };
 		BEF17D33260DDC0300D74DFD /* StepCounts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepCounts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEF17D36260DDC0300D74DFD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BEF17D38260DDC0300D74DFD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +49,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE0D53C9260F10A2005B9F98 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BE0D53CA260F10C3005B9F98 /* StepCountRecord.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		BEC15EE8260DF20F000C0532 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -80,8 +90,9 @@
 		BEF17D35260DDC0300D74DFD /* StepCounts */ = {
 			isa = PBXGroup;
 			children = (
-				BEF17D56260DDE3400D74DFD /* ViewModel */,
+				BE0D53C9260F10A2005B9F98 /* Model */,
 				BEF17D61260DE35E00D74DFD /* View */,
+				BEF17D56260DDE3400D74DFD /* ViewModel */,
 				BEF17D51260DDD4E00D74DFD /* Utils */,
 				BEC15EE8260DF20F000C0532 /* Resources */,
 			);
@@ -195,6 +206,7 @@
 				BEF17D5B260DDE8100D74DFD /* Routes.swift in Sources */,
 				BEF17D53260DDD6400D74DFD /* WindowBuilder.swift in Sources */,
 				BEF17D37260DDC0300D74DFD /* AppDelegate.swift in Sources */,
+				BE0D53CB260F10C3005B9F98 /* StepCountRecord.swift in Sources */,
 				BEF17D58260DDE4800D74DFD /* HomeViewModel.swift in Sources */,
 				BEF17D39260DDC0300D74DFD /* SceneDelegate.swift in Sources */,
 				BEF17D5E260DDEAA00D74DFD /* ViewModel.swift in Sources */,
