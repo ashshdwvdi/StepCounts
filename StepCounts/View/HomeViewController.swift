@@ -75,6 +75,10 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.inputStepCountTextField.addTarget(
+            self,
+            action: #selector(self.stepCountValueChanged(_:)),
+            for: .editingChanged)
         self.inputStepCountTextField.becomeFirstResponder()
         self.viewModel.viewDidLoad()
     }
@@ -94,6 +98,10 @@ class HomeViewController: UIViewController {
             equalTo: self.view.topAnchor, constant: Dimension.topPadding).isActive = true
         self.containerStackView.bottomAnchor.constraint(
             equalTo: self.view.bottomAnchor, constant: -Dimension.bottomPadding).isActive = true
+    }
+    
+    @objc private func stepCountValueChanged(_ textField: UITextField) {
+        self.viewModel.setInputStepCount(textField.text)
     }
 }
 
@@ -152,7 +160,9 @@ extension HomeViewController: HomeViewHandling {
     }
     
     func reloadView() {
-        
+        DispatchQueue.main.async {[weak self] in
+            self?.resultInfoLabel.text = self?.viewModel.resultString
+        }
     }
 }
 

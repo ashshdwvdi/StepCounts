@@ -17,6 +17,32 @@ class HomeViewModel: ViewModel {
     private static let currentDate = Date()
     private static let maxYearsInPast: Int = 20
     
+    private var inputStepCount: Double = 0
+    private(set) var resultString: String = ""
+    
+    // Throttle user input step count before checking steps
+    private var dateForStepsReachedFetchCount = 0
+    
+    private enum StepRecordResult {
+        case noRecordsData
+        case stepCountLessThanZero
+        case success( _ date: Date)
+        case none
+        
+        var result: String {
+            switch self {
+                case .noRecordsData:
+                    return "Steps Records data not found!, unable to check 🧐"
+                case .stepCountLessThanZero:
+                    return "Hey! enter steps more than 0 🥸"
+                case .success(let goalAchivedOnDate):
+                    return "Congo! 🥳 you achieved your goal on: \(goalAchivedOnDate)"
+                case .none:
+                    return "Hey! enter some steps 🥸"
+            }
+        }
+    }
+    
     
     // MARK: - Public methods
     
@@ -26,6 +52,32 @@ class HomeViewModel: ViewModel {
     
     func setViewHandler(_ viewHandler: HomeViewHandling?) {
         self.viewHandler = viewHandler
+    }
+    
+    func setInputStepCount(_ input: String?) {
+        guard let input = input, let value = Double(input) else {
+            self.resultString = StepRecordResult.none.result
+            self.viewHandler?.reloadView()
+            return
+        }
+        
+        guard value > 0 else {
+            self.resultString = StepRecordResult.stepCountLessThanZero.result
+            self.viewHandler?.reloadView()
+            return
+        }
+        
+        guard self.stepCountRecords.isEmpty == false else {
+            self.resultString = StepRecordResult.noRecordsData.result
+            self.viewHandler?.reloadView()
+            return
+        }
+        
+        self.inputStepCount = value
+        
+        self.dateForStepsReachedFetchCount += 1
+        self.handleDateCheckForStepsReached(
+            stepCount: value, fetchId: self.dateForStepsReachedFetchCount)
     }
     
     
@@ -92,5 +144,24 @@ class HomeViewModel: ViewModel {
         dateComponents.year = -Self.maxYearsInPast
         return Calendar.current.date(
             byAdding: dateComponents, to: Self.currentDate) ?? Self.currentDate
+    }
+    
+    private func handleDateCheckForStepsReached(
+        stepCount: Double,
+        fetchId: Int
+    ) {
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + .milliseconds(500)) {[weak self] in
+            guard fetchId == self?.dateForStepsReachedFetchCount else { return }
+            
+            if let goalDate = self?.getDateForStepsReached(stepCount) {
+                self?.resultString = StepRecordResult.success(goalDate).result
+                self?.viewHandler?.reloadView()
+            }
+        }
+    }
+    
+    private func getDateForStepsReached(_ stepCount: Double) -> Date? {
+        return nil
     }
 }
