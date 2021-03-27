@@ -116,7 +116,7 @@ private extension HomeViewController {
     
     private enum FontBook {
         static let inputStepCountText = UIFont.systemFont(ofSize: 15)
-        static let resultInfoLabelText = UIFont.systemFont(ofSize: 13, weight: .light)
+        static let resultInfoLabelText = UIFont.systemFont(ofSize: 13, weight: .medium)
     }
     
     private enum Dimension {

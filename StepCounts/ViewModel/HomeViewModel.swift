@@ -20,13 +20,17 @@ class HomeViewModel: ViewModel {
     private var inputStepCount: Double = 0
     private(set) var resultString: String = ""
     
-    // Throttle user input step count before checking steps
-    private var dateForStepsReachedFetchCount = 0
+    private static let dateFormatter: DateFormatter = {
+       let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd HH:mm:ss +zzzz"
+        formatter.dateStyle = .medium
+        return formatter
+    }()
     
     private enum StepRecordResult {
         case noRecordsData
         case stepCountLessThanZero
-        case success( _ date: Date)
+        case success( _ dateAsString: String)
         case failure
         case none
         
@@ -36,8 +40,8 @@ class HomeViewModel: ViewModel {
                     return "Steps Records data not found!, unable to check 🧐"
                 case .stepCountLessThanZero:
                     return "Hey! enter steps more than 0 🥸"
-                case .success(let goalAchivedOnDate):
-                    return "Congo! 🥳 you achieved your goal on: \(goalAchivedOnDate)"
+                case .success(let dateAsString):
+                    return "Congo! 🥳 you achieved your goal on: \"\(dateAsString)\""
                 case .failure:
                     return "OH you have long ways to go 😭"
                 case .none:
@@ -78,9 +82,7 @@ class HomeViewModel: ViewModel {
         
         self.inputStepCount = value
         
-        self.dateForStepsReachedFetchCount += 1
-        self.handleDateCheckForStepsReached(
-            stepCount: value, fetchId: self.dateForStepsReachedFetchCount)
+        self.handleDateCheckForStepsReached(stepCount: value)
     }
     
     
@@ -149,34 +151,29 @@ class HomeViewModel: ViewModel {
             byAdding: dateComponents, to: Self.currentDate) ?? Self.currentDate
     }
     
-    private func handleDateCheckForStepsReached(
-        stepCount: Double,
-        fetchId: Int
-    ) {
-        DispatchQueue.main.asyncAfter(
-            deadline: .now() + .milliseconds(500)) {[weak self] in
-            guard fetchId == self?.dateForStepsReachedFetchCount else { return }
-            
-            if let goalDate = self?.getDateForStepsReached(stepCount) {
-                self?.resultString = StepRecordResult.success(goalDate).result
-            } else {
-                self?.resultString = StepRecordResult.failure.result
-            }
-            
-            self?.viewHandler?.reloadView()
+    private func handleDateCheckForStepsReached(stepCount: Double) {
+        if let goalDate = self.getDateForStepsReached(stepCount) {
+            self.resultString = StepRecordResult.success(
+                Self.dateFormatter.string(from: goalDate)).result
+        } else {
+            self.resultString = StepRecordResult.failure.result
         }
+        
+        self.viewHandler?.reloadView()
     }
     
     private func getDateForStepsReached(_ stepCount: Double) -> Date? {
         let stepRecords = self.stepCountRecords
-        
         var stop = false
         var iterator = 0
         var resultRecord: StepCountRecord?
+        var cumulativeSumOfSteps: Double = 0.0
         
         while iterator < stepRecords.count && !stop {
             let record = stepRecords[iterator]
-            if record.stepCount >= stepCount {
+            cumulativeSumOfSteps += Double(Int(record.stepCount))
+            
+            if cumulativeSumOfSteps >= stepCount {
                 stop = true
                 resultRecord = record
             }
