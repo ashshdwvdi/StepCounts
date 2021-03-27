@@ -27,6 +27,7 @@ class HomeViewModel: ViewModel {
         case noRecordsData
         case stepCountLessThanZero
         case success( _ date: Date)
+        case failure
         case none
         
         var result: String {
@@ -37,6 +38,8 @@ class HomeViewModel: ViewModel {
                     return "Hey! enter steps more than 0 🥸"
                 case .success(let goalAchivedOnDate):
                     return "Congo! 🥳 you achieved your goal on: \(goalAchivedOnDate)"
+                case .failure:
+                    return "OH you have long ways to go 😭"
                 case .none:
                     return "Hey! enter some steps 🥸"
             }
@@ -156,12 +159,35 @@ class HomeViewModel: ViewModel {
             
             if let goalDate = self?.getDateForStepsReached(stepCount) {
                 self?.resultString = StepRecordResult.success(goalDate).result
-                self?.viewHandler?.reloadView()
+            } else {
+                self?.resultString = StepRecordResult.failure.result
             }
+            
+            self?.viewHandler?.reloadView()
         }
     }
     
     private func getDateForStepsReached(_ stepCount: Double) -> Date? {
-        return nil
+        let stepRecords = self.stepCountRecords
+        
+        var stop = false
+        var iterator = 0
+        var resultRecord: StepCountRecord?
+        
+        while iterator < stepRecords.count && !stop {
+            let record = stepRecords[iterator]
+            if record.stepCount >= stepCount {
+                stop = true
+                resultRecord = record
+            }
+            
+            iterator += 1
+        }
+        
+        if let result = resultRecord {
+            return result.dateTimeStamp
+        } else {
+            return nil
+        }
     }
 }
