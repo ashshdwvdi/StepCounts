@@ -31,12 +31,8 @@ class HomeViewModel: ViewModel {
                 HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
             ]
             
-            let writeDataTypes: Set = [
-                HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
-            ]
-            
             Self.healthStore.requestAuthorization(
-                toShare: writeDataTypes, read: readDataTypes) { [weak self](success, error) in
+                toShare: nil, read: readDataTypes) { [weak self](success, error) in
                 if success {
                     self?.fetchStepCounts()
                 }

@@ -26,8 +26,6 @@
 	<string>StepCounts need permission to your Health Data to calculate number of Steps</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>StepCounts need permission to your Health Data to calculate number of Steps</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>StepCounts need permission to your Health Data to calculate number of Steps</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
